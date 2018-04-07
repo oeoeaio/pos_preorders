@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for sale.order -->
+        <record id="seq_pos_preorder_line" model="ir.sequence">
+            <field name="name">Preorder Line</field>
+            <field name="code">pos.preorder.line</field>
+            <field name="prefix"></field>
+            <field name="padding">0</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
