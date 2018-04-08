@@ -41,6 +41,7 @@ db.include({
                 this.preorder_sorted.push(preorder.id);
             }
             preorder.lines = [];
+            preorder.payments = [];
             preorder.partner = this.partner_by_id[preorder.partner_id[0]];
             this.preorder_by_id[preorder.id] = preorder;
 
@@ -108,6 +109,17 @@ db.include({
                 lines[i].preorder = preorder;
             }
         }
+    },
+
+    add_prepayments: function(payments) {
+        for (var i = 0; i < payments.length; i++) {
+            this.prepayments_by_id[payments[i].id] = payments[i];
+            var preorder = this.preorder_by_id[payments[i].preorder_id[0]];
+            if (preorder) {
+                preorder.payments.push(payments[i]);
+                payments[i].preorder = preorder;
+            }
+        }
     }
 });
 
@@ -121,11 +133,6 @@ models.load_models({
         self.db.preorder_search_string = "";
         self.db.preorder_write_date = null;
         self.db.add_preorders(preorders);
-        // self.preorders_by_id = {};
-        // for (var i = 0; i < preorders.length; i++) {
-        //     preorders[i].lines = [];
-        //     self.preorders_by_id[preorders[i].id] = preorders[i];
-        // }
     },
 });
 
@@ -137,16 +144,21 @@ models.load_models({
     loaded: function(self,lines){
         self.db.preorder_lines_by_id = {};
         self.db.add_preorder_lines(lines);
-        // for (var i = 0; i < lines.length; i++) {
-        //     self.preorder_lines_by_id[lines[i].id] = lines[i];
-        //     var preorder = self.preorders_by_id[lines[i].preorder_id[0]];
-        //     if (preorder) {
-        //         preorder.lines.push(lines[i]);
-        //         lines[i].preorder = preorder;
-        //     }
-        // }
     },
 });
+
+
+// At POS Startup, after the preorders are loaded, load the prepayments, and associate
+// them with their preorder.
+models.load_models({
+    model: 'pos.prepayment',
+    fields: ['preorder_id','journal_id','amount'],
+    loaded: function(self,payments){
+        self.db.prepayments_by_id = {};
+        self.db.add_prepayments(payments);
+    },
+});
+
 
 // The screen that allows you to select the floor, see and select the table,
 // as well as edit them.
@@ -259,6 +271,19 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             contents.appendChild(preorderline);
         }
     },
+    add_paymentline: function(order, payment) {
+      var cashregister;
+      for ( var j = 0; j < this.pos.cashregisters.length; j++ ) {
+          if ( this.pos.cashregisters[j].journal_id[0] === payment.journal_id[0] ){
+              cashregister = this.pos.cashregisters[j];
+              break;
+          }
+      }
+
+      var paymentline = new models.Paymentline({},{order: order, cashregister: cashregister, pos: this.pos});
+      paymentline.set_amount(payment.amount);
+      order.paymentlines.add(paymentline);
+    },
     save_changes: function(){
         var order = this.pos.get_order();
 
@@ -269,6 +294,11 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             line = preorder.lines[i];
             product = this.pos.db.product_by_id[line.product_id[0]];
             order.add_product(product, { quantity: line.qty });
+        }
+        var payment;
+        for(var i = 0; i < preorder.payments.length; i++){
+            payment = preorder.payments[i];
+            this.add_paymentline(order, payment);
         }
         order.set_client(preorder.partner);
 
