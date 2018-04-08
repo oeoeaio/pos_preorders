@@ -49,16 +49,21 @@
                         </group> -->
                         <div class="oe_clear"/>
                     </page>
-                    <!-- <page string="Payments">
-                        <field name="statement_ids" colspan="4" nolabel="1">
-                            <tree editable="bottom" string="Statement lines">
+                    <page string="Pre-Payments">
+                        <field name="prepayments" colspan="4" nolabel="1">
+                            <tree editable="bottom" string="Payment lines">
                                 <field name="journal_id"/>
-                                <field name="statement_id"/>
                                 <field name="amount"/>
                             </tree>
+                            <form string="Payment lines">
+                                <group col="4">
+                                    <field name="journal_id"/>
+                                    <field name="amount"/>
+                                </group>
+                            </form>
                         </field>
                     </page>
-                    <page name="extra" string="Extra Info">
+                    <!-- <page name="extra" string="Extra Info">
                         <group string="General Information">
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="location_id" widget="selection" groups="stock.group_stock_multi_locations"/>

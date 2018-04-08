@@ -13,6 +13,7 @@ class PosPreorder(models.Model):
     name = fields.Char(string='Order Ref', required=True, copy=False)
     # amount_total = fields.Float(compute='_compute_amount_all', string='Total', digits=0)
     lines = fields.One2many('pos.preorder.line', 'preorder_id', string='Pre-Order Lines', copy=True)
+    prepayments = fields.One2many('pos.prepayment', 'preorder_id', string='Pre-Payments', copy=True)
     partner_id = fields.Many2one('res.partner', string='Customer', change_default=True, index=True)
 
 
@@ -37,3 +38,14 @@ class PosPreorderLine(models.Model):
             values['name'] = self.env['ir.sequence'].next_by_code('pos.preorder.line')
         _logger.info('name values for new preorder line (after): %s', values.get('name'))
         return super(PosPreorderLine, self).create(values)
+
+class PosPrepayment(models.Model):
+    _name = "pos.prepayment"
+    _description = "Payments for POS Pre-Orders"
+
+    journal_id = fields.Many2one(
+        'account.journal', string='Journal',
+        domain=[('journal_user', '=', True ), ('type', 'in', ['bank', 'cash'])],
+        required=True)
+    amount = fields.Float(string='Amount', digits=0)
+    preorder_id = fields.Many2one('pos.preorder', string='Order Ref', ondelete='cascade')
