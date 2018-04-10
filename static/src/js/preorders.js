@@ -59,7 +59,7 @@ db.include({
             var current_search_string = '';
             for (var id in this.preorder_by_id) {
                 preorder = this.preorder_by_id[id];
-                current_search_string = '' + preorder.id + ':' + preorder.partner.name;
+                current_search_string = '' + preorder.id + ':' + preorder.partner.name + '\n';
                 this.preorder_search_string += current_search_string;
             }
         }
