@@ -15,6 +15,6 @@
     'qweb': ['static/src/xml/preorder_templates.xml'],
     'images': [],
     'installable': True,
-    'application': True,
+    'application': False,
     'license': 'LGPL-3'
 }
