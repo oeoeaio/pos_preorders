@@ -287,6 +287,18 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
     save_changes: function(){
         var order = this.pos.get_order();
 
+        var orderlines = order.orderlines.models;
+        while (orderlines.length > 0){
+          order.remove_orderline(orderlines[0]);
+        }
+
+        var paymentlines = order.paymentlines.models;
+        while (paymentlines.length > 0){
+          order.remove_paymentline(paymentlines[0]);
+        }
+
+        order.set_client(null);
+
         var preorder = this.new_preorder;
         var product;
         var line;
@@ -300,6 +312,7 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             payment = preorder.payments[i];
             this.add_paymentline(order, payment);
         }
+
         order.set_client(preorder.partner);
 
         // if( this.has_client_changed() ){
