@@ -221,6 +221,8 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
         this.$('.searchbox .search-clear').click(function(){
             self.clear_search();
         });
+
+        this.$('.searchbox input').focus();
     },
     hide: function () {
         this._super();
