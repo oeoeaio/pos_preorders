@@ -9,7 +9,6 @@
     'description': "",
     'depends': ['point_of_sale'],
     'data': [
-      'data/pos_preorder_sequence.xml',
       'views/preorder_views.xml'
      ],
     'qweb': ['static/src/xml/preorder_templates.xml'],

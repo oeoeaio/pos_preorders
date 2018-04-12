@@ -41,21 +41,11 @@ class PosPreorderLine(models.Model):
             line.price_unit = line.product_id.lst_price
             line.price_total = line.price_unit * line.qty
 
-    name = fields.Char(string='Line No', required=True, copy=False)
     product_id = fields.Many2one('product.product', string='Product', required=True, change_default=True)
     price_unit = fields.Float(compute='_compute_amount_line_all', digits=0, string='Unit Price')
     price_total = fields.Float(compute='_compute_amount_line_all', digits=0, string='Total Price')
     qty = fields.Float('Quantity', digits=dp.get_precision('Product Unit of Measure'), default=1)
     preorder_id = fields.Many2one('pos.preorder', string='Order Ref', ondelete='cascade')
-
-    @api.model
-    def create(self, values):
-        _logger.info('name values for new preorder line: %s', values.get('name'))
-        if not values.get('name'):
-            # fallback on any pos.preorder sequence
-            values['name'] = self.env['ir.sequence'].next_by_code('pos.preorder.line')
-        _logger.info('name values for new preorder line (after): %s', values.get('name'))
-        return super(PosPreorderLine, self).create(values)
 
 class PosPrepayment(models.Model):
     _name = "pos.prepayment"
