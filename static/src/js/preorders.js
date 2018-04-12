@@ -126,7 +126,7 @@ db.include({
 // At POS Startup, load the preorders, and add them to the pos model
 models.load_models({
     model: 'pos.preorder',
-    fields: ['name','partner_id'],
+    fields: ['partner_id','amount_total','amount_paid'],
     loaded: function(self,preorders){
         self.db.preorder_sorted = [];
         self.db.preorder_by_id = {};

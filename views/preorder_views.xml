@@ -21,8 +21,10 @@
                 </header>
                 <sheet>
                 <group col="4" colspan="4" name="order_fields">
-                    <field name="name"/>
                     <field name="partner_id" domain="[('customer', '=', True)]" context="{'search_default_customer':1}"/>
+                    <field name="amount_total" widget="monetary"/>
+                    <field name="name"/>
+                    <field name="amount_paid" widget="monetary"/>
                 </group>
                 <notebook colspan="4">
                     <page string="Products">
@@ -30,11 +32,13 @@
                             <tree string="Order lines" editable="bottom">
                                 <field name="product_id"/>
                                 <field name="qty"/>
+                                <field name="price_total" widget="monetary"/>
                             </tree>
                             <form string="Order lines">
                                 <group col="4">
                                     <field name="product_id"/>
                                     <field name="qty"/>
+                                    <field name="price_total" widget="monetary"/>
                                 </group>
                             </form>
                         </field>
@@ -49,7 +53,7 @@
                             <form string="Payment lines">
                                 <group col="4">
                                     <field name="journal_id"/>
-                                    <field name="amount"/>
+                                    <field name="amount" widget="monetary"/>
                                 </group>
                             </form>
                         </field>
@@ -90,8 +94,9 @@
         <field name="model">pos.preorder</field>
         <field name="arch" type="xml">
             <tree string="POS Pre-Orders">
-                <field name="name"/>
                 <field name="partner_id"/>
+                <field name="amount_total" widget="monetary"/>
+                <field name="amount_paid" widget="monetary"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->
             </tree>
         </field>
