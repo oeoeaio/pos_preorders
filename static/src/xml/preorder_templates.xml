@@ -29,10 +29,6 @@
                         <span class='search-clear'></span>
                     </span>
                     <span class='searchbox'></span>
-                    <!-- <span class='button new-customer'>
-                        <i class='fa fa-user'></i>
-                        <i class='fa fa-plus'></i>
-                    </span> -->
                     <span class='button next oe_hidden highlight'>
                         Select Preorder
                         <i class='fa fa-angle-double-right'></i>
@@ -66,71 +62,5 @@
                 </section>
             </div>
         </div>
-    </t>
-
-    <t t-name="PreorderDetails">
-        <section class='preorder-details'>
-            <div class='preorder-name'><t t-esc='partner.name' /></div>
-            <div class='preorder-details-box clearfix'>
-                <div class='preorder-details-left'>
-                    <div class='preorder-detail'>
-                        <span class='label'>Customer Name</span>
-                        <t t-if='preorder.partner.name'>
-                            <span class='detail preorder-partner'><t t-esc='preorder.partner.name' /></span>
-                        </t>
-                        <t t-if='!preorder.partner'>
-                            <span class='detail preorder-partner empty'>N/A</span>
-                        </t>
-                    </div>
-                    <!-- <div class='preorder-detail'>
-                        <span class='label'>Email</span>
-                        <t t-if='partner.email'>
-                            <span class='detail preorder-email'><t t-esc='partner.email' /></span>
-                        </t>
-                        <t t-if='!partner.email'>
-                            <span class='detail preorder-email empty'>N/A</span>
-                        </t>
-                    </div>
-                    <div class='preorder-detail'>
-                        <span class='label'>Phone</span>
-                        <t t-if='partner.phone'>
-                            <span class='detail preorder-phone'><t t-esc='partner.phone' /></span>
-                        </t>
-                        <t t-if='!partner.phone'>
-                            <span class='detail preorder-phone empty'>N/A</span>
-                        </t>
-                    </div> -->
-                </div>
-                <div class='preorder-details-right'>
-                    <div class='preorder-detail'>
-                        <span class='label'>Customer Name</span>
-                        <t t-if='preorder.partner.name'>
-                            <span class='detail preorder-partner'><t t-esc='preorder.partner.name' /></span>
-                        </t>
-                        <t t-if='!preorder.partner'>
-                            <span class='detail preorder-partner empty'>N/A</span>
-                        </t>
-                    </div>
-                    <!-- <div class='preorder-detail'>
-                        <span class='label'>Tax ID</span>
-                        <t t-if='partner.vat'>
-                            <span class='detail vat'><t t-esc='partner.vat'/></span>
-                        </t>
-                        <t t-if='!partner.vat'>
-                            <span class='detail vat empty'>N/A</span>
-                        </t>
-                    </div>
-                    <div t-attf-class='preorder-detail #{widget.pos.pricelists.length &lt;= 1 ? "oe_hidden" : ""}'>
-                        <span class='label'>Pricelist</span>
-                        <t t-if='partner.property_product_pricelist'>
-                            <span class='detail property_product_pricelist'><t t-esc='partner.property_product_pricelist[1]'/></span>
-                        </t>
-                        <t t-if='!partner.property_product_pricelist'>
-                            <span class='detail property_product_pricelist empty'>N/A</span>
-                        </t>
-                    </div> -->
-                </div>
-            </div>
-        </section>
     </t>
 </templates>

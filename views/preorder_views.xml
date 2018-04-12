@@ -38,15 +38,6 @@
                                 </group>
                             </form>
                         </field>
-                        <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="order_total">
-                            <field name="amount_tax" widget="monetary"/>
-                            <div class="oe_subtotal_footer_separator oe_inline">
-                                <label for="amount_total" />
-                                <button name="button_dummy"
-                                    states="draft" string="(update)" class="oe_edit_only oe_link"/>
-                            </div>
-                            <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
-                        </group> -->
                         <div class="oe_clear"/>
                     </page>
                     <page string="Pre-Payments">
@@ -63,26 +54,6 @@
                             </form>
                         </field>
                     </page>
-                    <!-- <page name="extra" string="Extra Info">
-                        <group string="General Information">
-                            <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="location_id" widget="selection" groups="stock.group_stock_multi_locations"/>
-                            <field name="user_id"/>
-                            <field name="pricelist_id" groups="product.group_sale_pricelist"/>
-                            <field name="picking_id" readonly="1"/>
-                            <field name="pos_reference"/>
-                        </group>
-                        <group string="Accounting Information">
-                            <group>
-                                <field name="sale_journal" domain="[('type','=','sale')]"/>
-                                <field name="account_move" readonly="1"
-                                        attrs="{'invisible':[('state','!=','done')]}"/>
-                            </group>
-                        </group>
-                    </page>
-                    <page string="Notes" >
-                        <field name="note"/>
-                    </page> -->
                 </notebook>
             </sheet>
             </form>
