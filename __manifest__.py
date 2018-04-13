@@ -9,7 +9,9 @@
     'description': "",
     'depends': ['point_of_sale'],
     'data': [
-      'views/preorder_views.xml'
+      'views/preorder_views.xml',
+      'views/sms_settings.xml',
+      'wizard/send_sms.xml',
      ],
     'qweb': ['static/src/xml/preorder_templates.xml'],
     'images': [],

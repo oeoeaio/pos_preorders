@@ -47,6 +47,10 @@ class PosPreorder(models.Model):
     order_id = fields.Many2one('pos.order', string='POS Order', ondelete='set null')
     collected_date = fields.Datetime(string='Collected On')
 
+    def _get_default_sms_recipients(self):
+        _logger.info("Mapped count: %s", len(self.mapped('partner_id')))
+        return self.mapped('partner_id')
+
 class PosPreorderLine(models.Model):
     _name = "pos.preorder.line"
     _description = "Lines of Point of Sale Orders"
