@@ -8,6 +8,19 @@ var core = require('web.core');
 
 var QWeb = core.qweb;
 
+var _super_order = models.Order.prototype;
+models.Order = models.Order.extend({
+    export_as_JSON: function() {
+        var json = _super_order.export_as_JSON.apply(this,arguments);
+        json.preorder_id = this.preorder_id;
+        return json;
+    },
+    init_from_JSON: function(json) {
+        _super_order.init_from_JSON.apply(this,arguments);
+        this.preorder_id = json.preorder_id;
+    },
+});
+
 // At POS Startup, load the preorders, and add them to the pos model
 models.load_models({
     model: 'pos.preorder',
@@ -187,6 +200,8 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
         order.set_client(null);
 
         var preorder = this.new_preorder;
+        order.preorder_id = preorder.id;
+
         var product;
         var line;
         for(var i = 0; i < preorder.lines.length; i++){

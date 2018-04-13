@@ -96,6 +96,7 @@
         <field name="arch" type="xml">
             <tree string="POS Pre-Orders">
                 <field name="partner_id"/>
+                <field name="collected_date"/>
                 <field name="amount_total" widget="monetary"/>
                 <field name="amount_paid" widget="monetary"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->
