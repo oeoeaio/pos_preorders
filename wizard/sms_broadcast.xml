@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model="ir.ui.view" id="preorder_send_sms_form">
-        <field name="name">preorder_send_sms</field>
-        <field name="model">pos.preorder.send_sms</field>
+    <record model="ir.ui.view" id="preorder_sms_broadcast_form">
+        <field name="name">preorder_sms_broadcast</field>
+        <field name="model">pos.preorder.sms.broadcast</field>
         <field name="arch" type="xml">
             <form string="Send SMS">
                 <sheet>
                     Sending to <field name="recipient_count" readonly='1'/> recipient(s)
                     <group>
-                        <field name="reply_to"/>
-                        <field name="message" widget="text"/>
+                        <field name="preorder_reply_to"/>
+                        <field name="preorder_message" widget="text"/>
                     </group>
                 </sheet>
                 <footer>
@@ -22,7 +22,7 @@
 
     <act_window
         name="Send SMS"
-        res_model="pos.preorder.send_sms"
+        res_model="pos.preorder.sms.broadcast"
         src_model="pos.preorder"
         view_mode="form"
         target="new"

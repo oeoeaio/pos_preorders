@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sms_broadcast.preorder</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="sms_broadcast.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='sms_broadcast']" position="inside">
+                <h2>Preorder SMS Defaults</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                        <label for="default_preorder_reply_to"/>
+                        <div class="text-muted">
+                            The default mobile number to reply to
+                        </div>
+                        <field name="default_preorder_reply_to"/>
+                    </div>
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                        <label for="default_preorder_message"/>
+                        <div class="text-muted">
+                            The default message to send
+                        </div>
+                        <field name="default_preorder_message" widget='text'/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sms_config_settings" model="ir.actions.act_window">
+        <field name="name">SMS Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'sms_broadcast'}</field>
+    </record>
+
+    <menuitem id="menu_sms_settings"
+        name="SMS Settings"
+        parent="point_of_sale.menu_point_config_product"
+        sequence="2"
+        action="action_sms_config_settings"
+        groups="point_of_sale.group_pos_manager"/>
+
+</odoo>
