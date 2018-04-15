@@ -28,14 +28,10 @@ class PosPreorder(models.Model):
 
     @api.depends('prepayments.amount','lines.price_total')
     def _compute_amount_all(self):
+        currency = self.env.user.company_id.currency_id
         for order in self:
-            order.amount_paid = 0.0
-            currency = order.pricelist_id.currency_id
             order.amount_paid = currency.round(sum(payment.amount for payment in order.prepayments))
             order.amount_total = currency.round(sum(line.price_total for line in order.lines))
-
-    def _default_pricelist(self):
-        return self.env['product.pricelist'].search([('currency_id', '=', self.env.user.company_id.currency_id.id)], limit=1)
 
     @api.depends('partner_id.phone','partner_id.mobile')
     def _compute_phone_or_mobile(self):
@@ -43,7 +39,6 @@ class PosPreorder(models.Model):
             order.phone = order.partner_id.mobile or order.partner_id.phone
 
     name = fields.Char(string='Order Ref', required=False, copy=False)
-    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True, default=_default_pricelist)
     amount_paid = fields.Float(compute='_compute_amount_all', string='Paid', digits=0)
     amount_total = fields.Float(compute='_compute_amount_all', string='Total', digits=0)
     lines = fields.One2many('pos.preorder.line', 'preorder_id', string='Pre-Order Lines', copy=True)
