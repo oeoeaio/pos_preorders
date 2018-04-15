@@ -37,15 +37,21 @@ class PosPreorder(models.Model):
     def _default_pricelist(self):
         return self.env['product.pricelist'].search([('currency_id', '=', self.env.user.company_id.currency_id.id)], limit=1)
 
+    @api.depends('partner_id.phone','partner_id.mobile')
+    def _compute_phone_or_mobile(self):
+        for order in self:
+            order.phone = order.partner_id.mobile or order.partner_id.phone
+
     name = fields.Char(string='Order Ref', required=False, copy=False)
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True, default=_default_pricelist)
     amount_paid = fields.Float(compute='_compute_amount_all', string='Paid', digits=0)
     amount_total = fields.Float(compute='_compute_amount_all', string='Total', digits=0)
     lines = fields.One2many('pos.preorder.line', 'preorder_id', string='Pre-Order Lines', copy=True)
     prepayments = fields.One2many('pos.prepayment', 'preorder_id', string='Pre-Payments', copy=True)
-    partner_id = fields.Many2one('res.partner', string='Customer', change_default=True, index=True)
+    partner_id = fields.Many2one('res.partner', string='Customer', required=True, change_default=True, index=True)
     order_id = fields.Many2one('pos.order', string='POS Order', ondelete='set null')
     collected_date = fields.Datetime(string='Collected On')
+    phone = fields.Char(compute='_compute_phone_or_mobile', string='Phone')
 
     def _get_default_sms_recipients(self):
         _logger.info("Mapped count: %s", len(self.mapped('partner_id')))
