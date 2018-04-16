@@ -12,8 +12,20 @@
         </xpath>
     </template>
 
+    <record id="view_pos_preorder_filter" model="ir.ui.view">
+        <field name="name">pos.preorder.search</field>
+        <field name="model">pos.preorder</field>
+        <field name="arch" type="xml">
+            <search string="Search Preorders">
+                <field name="partner_id"/>
+                <field name="name"/>
+                <filter name="filter_to_collected" string="Collected" domain="[('collected_date', '!=', False)]"/>
+                <filter name="filter_to_uncollected" string="Not Collected" domain="[('collected_date', '=', False)]"/>
+            </search>
+        </field>
+    </record>
 
-    <record id="view_pos_pos_form" model="ir.ui.view">
+    <record id="view_pos_preorder_form" model="ir.ui.view">
         <field name="name">pos.preorder.form</field>
         <field name="model">pos.preorder</field>
         <field name="arch" type="xml">
@@ -73,6 +85,8 @@
         <field name="view_mode">tree,kanban,form</field>
         <field name="view_id" eval="False"/>
         <field name="domain">[]</field>
+        <field name="search_view_id" ref="view_pos_preorder_filter"/>
+        <field name="context">{'search_default_filter_to_uncollected': 1}</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Click to create a new pre-order.
