@@ -9,16 +9,19 @@ class PosOrder(models.Model):
     _inherit = "pos.order"
 
     # Actually One2one
-    preorders = fields.One2many('pos.preorder', 'order_id', string='Preorder')
+    preorders = fields.Many2many('pos.preorder', string='Preorders')
 
     @api.model
     def _order_fields(self, ui_order):
         order_fields = super(PosOrder, self)._order_fields(ui_order)
-        preorder_id = ui_order.get('preorder_id', None)
-        if preorder_id and not self.preorders.browse(preorder_id).collected_date:
-            order_fields['preorders'] = [[1, preorder_id, {
-                'collected_date': fields.Datetime.now(),
-            }]]
+        for preorder_id in ui_order.get('preorder_ids', []):
+            if not self.preorders.browse(preorder_id).collected_date:
+                _logger.info("preorder_id: %s", preorder_id)
+                _logger.info("collected_date: %s", self.preorders.browse(preorder_id).collected_date)
+                order_fields['preorders'] = order_fields.get('preorders', [])
+                order_fields['preorders'].append([1, preorder_id, {
+                    'collected_date': fields.Datetime.now(),
+                }])
         return order_fields
 
 class PosPreorder(models.Model):
@@ -44,7 +47,7 @@ class PosPreorder(models.Model):
     lines = fields.One2many('pos.preorder.line', 'preorder_id', string='Pre-Order Lines', copy=True)
     prepayments = fields.One2many('pos.prepayment', 'preorder_id', string='Pre-Payments', copy=True)
     partner_id = fields.Many2one('res.partner', string='Customer', required=True, change_default=True, index=True)
-    order_id = fields.Many2one('pos.order', string='POS Order', ondelete='set null')
+    orders = fields.Many2many('pos.order', string='POS Orders')
     collected_date = fields.Datetime(string='Collected On')
     phone = fields.Char(compute='_compute_phone_or_mobile', string='Phone')
 

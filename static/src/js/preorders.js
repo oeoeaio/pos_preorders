@@ -5,6 +5,7 @@ var gui = require('point_of_sale.gui');
 var models = require('point_of_sale.models');
 var screens = require('point_of_sale.screens');
 var core = require('web.core');
+var PopupWidget = require('point_of_sale.popups');
 
 var QWeb = core.qweb;
 
@@ -12,12 +13,12 @@ var _super_order = models.Order.prototype;
 models.Order = models.Order.extend({
     export_as_JSON: function() {
         var json = _super_order.export_as_JSON.apply(this,arguments);
-        json.preorder_id = this.preorder_id;
+        json.preorder_ids = this.preorder_ids || [];
         return json;
     },
     init_from_JSON: function(json) {
         _super_order.init_from_JSON.apply(this,arguments);
-        this.preorder_id = json.preorder_id;
+        this.preorder_ids = json.preorder_ids || [];
     },
 });
 
@@ -84,7 +85,6 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
 
         this.$('.next').click(function(){
             self.save_changes();
-            self.gui.back();    // FIXME HUH ?
         });
 
         var preorders = this.pos.db.get_preorders_sorted(1000);
@@ -124,8 +124,8 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
     },
     hide: function () {
         this._super();
-        this.new_preorder = null;
-        this.new_client = null;
+        this.selected_preorder = null;
+        this.selected_client = null;
     },
     perform_search: function(query, associate_result){
         var preorders;
@@ -133,10 +133,9 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             preorders = this.pos.db.search_preorder(query);
             // this.display_preorder_details('hide');
             if ( associate_result && preorders.length === 1){
-                this.new_preorder = preorders[0];
-                this.new_client = preorders[0].customer;
+                this.selected_preorder = preorders[0];
+                this.selected_client = preorders[0].customer;
                 this.save_changes();
-                this.gui.back();
             }
             this.render_list(preorders);
         }else{
@@ -184,24 +183,22 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
       paymentline.set_amount(payment.amount);
       order.paymentlines.add(paymentline);
     },
-    save_changes: function(){
-        var order = this.pos.get_order();
+    clear_order: function(order){
+      var orderlines = order.orderlines.models;
+      while (orderlines.length > 0){
+        order.remove_orderline(orderlines[0]);
+      }
 
-        var orderlines = order.orderlines.models;
-        while (orderlines.length > 0){
-          order.remove_orderline(orderlines[0]);
-        }
+      var paymentlines = order.paymentlines.models;
+      while (paymentlines.length > 0){
+        order.remove_paymentline(paymentlines[0]);
+      }
 
-        var paymentlines = order.paymentlines.models;
-        while (paymentlines.length > 0){
-          order.remove_paymentline(paymentlines[0]);
-        }
+      order.preorder_ids = [];
 
-        order.set_client(null);
-
-        var preorder = this.new_preorder;
-        order.preorder_id = preorder.id;
-
+      order.set_client(null);
+    },
+    apply_preorder: function(order, preorder){
         var product;
         var line;
         for(var i = 0; i < preorder.lines.length; i++){
@@ -215,7 +212,37 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             this.add_paymentline(order, payment);
         }
 
-        order.set_client(preorder.partner);
+        order.preorder_ids.push(preorder.id);
+
+        if (!order.client) {
+            order.set_client(preorder.partner);
+        }
+        this.gui.back();
+    },
+    save_changes: function(){
+        var preorder = this.selected_preorder;
+        var order = this.pos.get_order();
+
+        order.preorder_ids = order.preorder_ids || [];
+
+        if (order.preorder_ids.length){
+            var self = this;
+            self.gui.show_popup('multiple_preorder',{
+                'title': 'There is already a preorder applied',
+                'body':  'Would you like to replace or combine with the existing preorder?',
+                replace: function(){
+                  self.clear_order(order);
+                  self.apply_preorder(order, preorder);
+                },
+                confirm: function(){
+                  self.apply_preorder(order, preorder);
+                },
+            });
+        }
+        else {
+            this.clear_order(order);
+            this.apply_preorder(order, preorder);
+        }
 
         // if( this.has_client_changed() ){
         //     var default_fiscal_position_id = _.findWhere(this.pos.fiscal_positions, {'id': this.pos.config.default_fiscal_position_id[0]});
@@ -231,13 +258,13 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
         //     order.set_client(this.new_client);
         // }
     },
-    has_client_changed: function(){
-        if( this.old_client && this.new_client ){
-            return this.old_client.id !== this.new_client.id;
-        }else{
-            return !!this.old_client !== !!this.new_client;
-        }
-    },
+    // has_client_changed: function(){
+    //     if( this.old_client && this.new_client ){
+    //         return this.old_client.id !== this.new_client.id;
+    //     }else{
+    //         return !!this.old_client !== !!this.new_client;
+    //     }
+    // },
     line_select: function(event,$line,id){
         var preorder = this.pos.db.get_preorder_by_id(id);
         this.$('.preorder-list .lowlight').removeClass('lowlight');
@@ -245,16 +272,16 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             $line.removeClass('highlight');
             $line.addClass('lowlight');
             // this.display_preorder_details('hide',preorder);
-            this.new_preorder = null;
-            this.new_client = null;
+            this.selected_preorder = null;
+            this.selected_client = null;
             this.toggle_save_button();
         }else{
             this.$('.preorder-list .highlight').removeClass('highlight');
             $line.addClass('highlight');
             var y = event.pageY - $line.parent().offset().top;
             // this.display_client_details('show',partner,y);
-            this.new_preorder = preorder;
-            this.new_client = preorder.customer;
+            this.selected_preorder = preorder;
+            this.selected_client = preorder.customer;
             this.toggle_save_button();
         }
     },
@@ -274,7 +301,7 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
     },
     toggle_save_button: function(){
         var $button = this.$('.button.next');
-        $button.toggleClass('oe_hidden',!this.new_preorder);
+        $button.toggleClass('oe_hidden',!this.selected_preorder);
     },
     close: function(){
         this._super();
@@ -284,6 +311,20 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
     },
 });
 gui.define_screen({name:'preorders', widget: PreorderListScreenWidget});
+
+var MultiplePreorderPopupWidget = PopupWidget.extend({
+    template: 'MultiplePreorderPopupWidget',
+    events: _.extend({}, PopupWidget.prototype.events, {
+        'click .replace': 'click_replace',
+    }),
+    click_replace: function(){
+        this.gui.close_popup();
+        if (this.options.replace) {
+            this.options.replace.call(this);
+        }
+    },
+});
+gui.define_popup({name:'multiple_preorder', widget: MultiplePreorderPopupWidget});
 
 return {
     PreorderListScreenWidget: PreorderListScreenWidget,

@@ -65,4 +65,24 @@
             </div>
         </div>
     </t>
+
+    <t t-name="MultiplePreorderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-multiple-preorder">
+                <p class="title"><t t-esc=" widget.options.title || 'Confirm ?' " /></p>
+                <p class="body"><t t-esc="  widget.options.body || '' "/></p>
+                <div class="footer">
+                    <div class="button confirm">
+                        Combine
+                    </div>
+                    <div class="button replace">
+                        Replace
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
 </templates>
