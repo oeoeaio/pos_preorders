@@ -61,6 +61,7 @@ class PosPreorder(models.Model):
         'Status', copy=False, default='uncollected')
     state_date = fields.Datetime(string='On', oldname='collected_date')
     phone = fields.Char(compute='_compute_phone_or_mobile', string='Phone')
+    pack_day = fields.Date(string='Pack Day', required=True)
 
     def _get_default_sms_recipients(self):
         _logger.info("Mapped count: %s", len(self.mapped('partner_id')))
@@ -86,6 +87,7 @@ class PosPreorderLine(models.Model):
     price_total = fields.Float(compute='_compute_amount_line_all', digits=0, string='Total Price')
     qty = fields.Float('Quantity', digits=dp.get_precision('Product Unit of Measure'), default=1)
     preorder_id = fields.Many2one('pos.preorder', string='Order Ref', ondelete='cascade')
+    pack_day = fields.Date(related='preorder_id.pack_day', store=True)
 
 class PosPrepayment(models.Model):
     _name = "pos.prepayment"
@@ -97,3 +99,4 @@ class PosPrepayment(models.Model):
         required=True)
     amount = fields.Float(string='Amount', digits=0)
     preorder_id = fields.Many2one('pos.preorder', string='Order Ref', ondelete='cascade')
+    pack_day = fields.Date(related='preorder_id.pack_day', store=True)

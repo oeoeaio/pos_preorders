@@ -23,13 +23,15 @@ models.Order = models.Order.extend({
     },
 });
 
+var five_days_ago = moment().subtract(5, 'days').utc().format('YYYY-MM-DD HH:mm:ss')
+
 var _super_pos = models.PosModel.prototype;
 models.PosModel = models.PosModel.extend({
     reload_updated_preorders: function(){
         var self = this;
         var def  = new $.Deferred();
         var fields = ['state','write_date'];
-        var domain = [['write_date','>',this.db.get_preorder_write_date()]];
+        var domain = [['pack_day','>',five_days_ago],['write_date','>',this.db.get_preorder_write_date()]];
         rpc.query({
                 model: 'pos.preorder',
                 method: 'search_read',
@@ -54,6 +56,7 @@ models.PosModel = models.PosModel.extend({
 models.load_models({
     model: 'pos.preorder',
     fields: ['partner_id','state','amount_total','amount_paid','write_date'],
+    domain: [['pack_day','>',five_days_ago]],
     loaded: function(self,preorders){
         self.db.preorder_sorted = [];
         self.db.preorder_by_id = {};
@@ -68,6 +71,7 @@ models.load_models({
 models.load_models({
     model: 'pos.preorder.line',
     fields: ['preorder_id','product_id','qty'],
+    domain: [['pack_day','>',five_days_ago]],
     loaded: function(self,lines){
         self.db.preorder_lines_by_id = {};
         self.db.add_preorder_lines(lines);
@@ -80,6 +84,7 @@ models.load_models({
 models.load_models({
     model: 'pos.prepayment',
     fields: ['preorder_id','journal_id','amount'],
+    domain: [['pack_day','>',five_days_ago]],
     loaded: function(self,payments){
         self.db.prepayments_by_id = {};
         self.db.add_prepayments(payments);

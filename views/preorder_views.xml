@@ -18,6 +18,7 @@
         <field name="arch" type="xml">
             <search string="Search Preorders">
                 <field name="partner_id"/>
+                <field name="pack_day"/>
                 <field name="name"/>
                 <field name="state"/>
                 <filter name="filter_to_collected" string="Collected or Delivered" domain="[('state', 'in', ['collected','delivered'])]"/>
@@ -39,6 +40,7 @@
                     <field name="amount_total" widget="monetary"/>
                     <field name="state"/>
                     <field name="amount_paid" widget="monetary"/>
+                    <field name="pack_day"/>
                     <field name="name"/>
                 </group>
                 <notebook colspan="4">
@@ -113,10 +115,10 @@
             <tree string="POS Pre-Orders">
                 <field name="partner_id"/>
                 <field name='phone'/>
-                <field name="state"/>
-                <field name="state_date"/>
+                <field name='pack_day'/>
                 <field name="amount_total" widget="monetary"/>
                 <field name="amount_paid" widget="monetary"/>
+                <field name="state"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->
             </tree>
         </field>
