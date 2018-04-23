@@ -119,6 +119,7 @@
                 <field name="amount_total" widget="monetary"/>
                 <field name="amount_paid" widget="monetary"/>
                 <field name="state"/>
+                <field name="state_date"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->
             </tree>
         </field>

@@ -59,7 +59,7 @@ class PosPreorder(models.Model):
         [('uncollected', 'Uncollected'), ('to_deliver', 'To Deliver'), ('cancel', 'Cancelled'),
         ('wednesday', 'Wednesday'), ('collected', 'Collected'), ('delivered', 'Delivered')],
         'Status', copy=False, default='uncollected')
-    state_date = fields.Datetime(string='On', oldname='collected_date')
+    state_date = fields.Datetime(string='On')
     phone = fields.Char(compute='_compute_phone_or_mobile', string='Phone')
     pack_day = fields.Date(string='Pack Day', required=True)
 
