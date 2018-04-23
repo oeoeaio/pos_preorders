@@ -9,9 +9,10 @@
     'description': "",
     'depends': ['point_of_sale','sms_broadcast'],
     'data': [
-      'views/preorder_views.xml',
-      'views/res_config_settings.xml',
-      'wizard/sms_broadcast.xml',
+        'views/preorder_views.xml',
+        'views/res_config_settings.xml',
+        'wizard/sms_broadcast.xml',
+        'security/ir.model.access.csv',
      ],
     'qweb': ['static/src/xml/preorder_templates.xml'],
     'images': [],
