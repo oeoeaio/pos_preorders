@@ -19,8 +19,9 @@
             <search string="Search Preorders">
                 <field name="partner_id"/>
                 <field name="name"/>
-                <filter name="filter_to_collected" string="Collected" domain="[('collected_date', '!=', False)]"/>
-                <filter name="filter_to_uncollected" string="Not Collected" domain="[('collected_date', '=', False)]"/>
+                <field name="state"/>
+                <filter name="filter_to_collected" string="Collected or Delivered" domain="[('state', 'in', ['collected','delivered'])]"/>
+                <filter name="filter_to_uncollected" string="Not Collected or Delivered" domain="[('state', 'not in', ['collected','delivered'])]"/>
             </search>
         </field>
     </record>
@@ -36,8 +37,9 @@
                 <group col="4" colspan="4" name="order_fields">
                     <field name="partner_id" domain="[('customer', '=', True)]" context="{'search_default_customer':1}"/>
                     <field name="amount_total" widget="monetary"/>
-                    <field name="name"/>
+                    <field name="state"/>
                     <field name="amount_paid" widget="monetary"/>
+                    <field name="name"/>
                 </group>
                 <notebook colspan="4">
                     <page string="Products">
@@ -111,7 +113,8 @@
             <tree string="POS Pre-Orders">
                 <field name="partner_id"/>
                 <field name='phone'/>
-                <field name="collected_date"/>
+                <field name="state"/>
+                <field name="state_date"/>
                 <field name="amount_total" widget="monetary"/>
                 <field name="amount_paid" widget="monetary"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->

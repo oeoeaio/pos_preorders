@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="preorder_state_form">
+        <field name="name">preorder_state</field>
+        <field name="model">pos.preorder.state</field>
+        <field name="arch" type="xml">
+            <form string="Update Status">
+                <sheet>
+                    Setting status for <field name="record_count" readonly='1'/> preorder(s)
+                    <group>
+                        <field name="state"/>
+                        <field name='update_state_date'/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_update_state" string="Update Status" type="object" class="btn-primary"/>
+                    <button special="cancel" string="Cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        name="Update Status"
+        res_model="pos.preorder.state"
+        src_model="pos.preorder"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="action_preorder_state"/>
+</odoo>

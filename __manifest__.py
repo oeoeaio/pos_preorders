@@ -12,6 +12,7 @@
         'views/preorder_views.xml',
         'views/res_config_settings.xml',
         'wizard/sms_broadcast.xml',
+        'wizard/preorder_state.xml',
         'security/ir.model.access.csv',
      ],
     'qweb': ['static/src/xml/preorder_templates.xml'],

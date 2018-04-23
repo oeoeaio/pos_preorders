@@ -15,12 +15,13 @@ class PosOrder(models.Model):
     def _order_fields(self, ui_order):
         order_fields = super(PosOrder, self)._order_fields(ui_order)
         for preorder_id in ui_order.get('preorder_ids', []):
-            if not self.preorders.browse(preorder_id).collected_date:
-                _logger.info("preorder_id: %s", preorder_id)
-                _logger.info("collected_date: %s", self.preorders.browse(preorder_id).collected_date)
+            preorder = self.preorders.browse(preorder_id)
+            state = preorder.next_state()
+            if state:
                 order_fields['preorders'] = order_fields.get('preorders', [])
                 order_fields['preorders'].append([1, preorder_id, {
-                    'collected_date': fields.Datetime.now(),
+                    'state': state,
+                    'state_date': fields.Datetime.now(),
                 }])
         return order_fields
 
@@ -28,6 +29,12 @@ class PosPreorder(models.Model):
     _name = "pos.preorder"
     _description = "Point of Sale Pre-Orders"
     _order = "id desc"
+
+    STATES = {
+        'wednesday': 'collected',
+        'uncollected': 'collected',
+        'to_deliver': 'delivered',
+    }
 
     @api.depends('prepayments.amount','lines.price_total')
     def _compute_amount_all(self):
@@ -48,12 +55,19 @@ class PosPreorder(models.Model):
     prepayments = fields.One2many('pos.prepayment', 'preorder_id', string='Pre-Payments', copy=True)
     partner_id = fields.Many2one('res.partner', string='Customer', required=True, change_default=True, index=True)
     orders = fields.Many2many('pos.order', string='POS Orders')
-    collected_date = fields.Datetime(string='Collected On')
+    state = fields.Selection(
+        [('uncollected', 'Uncollected'), ('to_deliver', 'To Deliver'), ('cancel', 'Cancelled'),
+        ('wednesday', 'Wednesday'), ('collected', 'Collected'), ('delivered', 'Delivered')],
+        'Status', copy=False, default='uncollected')
+    state_date = fields.Datetime(string='On', oldname='collected_date')
     phone = fields.Char(compute='_compute_phone_or_mobile', string='Phone')
 
     def _get_default_sms_recipients(self):
         _logger.info("Mapped count: %s", len(self.mapped('partner_id')))
         return self.mapped('partner_id')
+
+    def next_state(self):
+        return self.STATES.get(self.state, None)
 
 class PosPreorderLine(models.Model):
     _name = "pos.preorder.line"
