@@ -40,6 +40,10 @@
     transition: all 150ms linear;
     background: rgb(216, 238, 227);
 }
+.pos .preorderlist-screen .preorder-list tr.dulled{
+    transition: all 150ms linear;
+    color: #a1a1a1;
+}
 .pos .preorderlist-screen .preorder-list tr.lowlight:nth-child(even){
     transition: all 150ms linear;
     background: rgb(227, 246, 237);

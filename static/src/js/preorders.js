@@ -6,6 +6,7 @@ var models = require('point_of_sale.models');
 var screens = require('point_of_sale.screens');
 var core = require('web.core');
 var PopupWidget = require('point_of_sale.popups');
+var rpc = require('web.rpc');
 
 var QWeb = core.qweb;
 
@@ -22,10 +23,37 @@ models.Order = models.Order.extend({
     },
 });
 
+var _super_pos = models.PosModel.prototype;
+models.PosModel = models.PosModel.extend({
+    reload_updated_preorders: function(){
+        var self = this;
+        var def  = new $.Deferred();
+        var fields = ['state','write_date'];
+        var domain = [['write_date','>',this.db.get_preorder_write_date()]];
+        rpc.query({
+                model: 'pos.preorder',
+                method: 'search_read',
+                args: [domain, fields],
+            }, {
+                timeout: 3000,
+                shadow: true,
+            })
+            .then(function(preorders){
+                if (self.db.add_preorders(preorders)) {   // check if the preorders we got were real updates
+                    var ids = preorders.map(function(p){return p.id;})
+                    def.resolve(ids);
+                } else {
+                    def.reject();
+                }
+            }, function(type,err){ def.reject(); });
+        return def;
+    },
+});
+
 // At POS Startup, load the preorders, and add them to the pos model
 models.load_models({
     model: 'pos.preorder',
-    fields: ['partner_id','amount_total','amount_paid'],
+    fields: ['partner_id','state','amount_total','amount_paid','write_date'],
     loaded: function(self,preorders){
         self.db.preorder_sorted = [];
         self.db.preorder_by_id = {};
@@ -90,7 +118,7 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
         var preorders = this.pos.db.get_preorders_sorted(1000);
         this.render_list(preorders);
 
-        // this.reload_preorders();
+        this.reload_preorders();
 
         // if( this.old_client ){
         //     this.display_client_details('show',this.old_client,0);
@@ -166,6 +194,11 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
                 preorderline.classList.add('highlight');
             }else{
                 preorderline.classList.remove('highlight');
+            }
+            if( preorder.state == 'collected' || preorder.state == 'delivered' ){
+                preorderline.classList.add('dulled');
+            }else{
+                preorderline.classList.remove('dulled');
             }
             contents.appendChild(preorderline);
         }
@@ -285,18 +318,13 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             this.toggle_save_button();
         }
     },
-    // This fetches partner changes on the server, and in case of changes,
-    // rerenders the affected views
     reload_preorders: function(){
         var self = this;
-        return this.pos.load_new_preorders().then(function(){
-            self.render_list(self.pos.db.get_preorders_sorted(1000));
-
-            // update the currently assigned client if it has been changed in db.
-            var curr_client = self.pos.get_order().get_client();
-            if (curr_client) {
-                self.pos.get_order().set_client(self.pos.db.get_preorder_by_id(curr_client.id));
+        return this.pos.reload_updated_preorders().then(function(preorder_ids){
+            for (var i=0; i < preorder_ids.length; i++){
+              self.preorder_cache.clear_node(preorder_ids[i]);
             }
+            self.render_list(self.pos.db.get_preorders_sorted(1000));
         });
     },
     toggle_save_button: function(){

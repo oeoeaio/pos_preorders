@@ -12,6 +12,7 @@
     <t t-name="PreorderLine">
         <tr class='preorder-line' t-att-data-id='preorder.id'>
             <td><t t-esc='preorder.partner.name' /></td>
+            <td><t t-esc='preorder.state' /></td>
             <td><t t-esc='widget.format_currency(preorder.amount_total)' /></td>
             <td><t t-esc='widget.format_currency(preorder.amount_paid)' /></td>
         </tr>
@@ -50,6 +51,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Customer</th>
+                                                <th>Status</th>
                                                 <th>Order Total</th>
                                                 <th>Paid Amount</th>
                                             </tr>

@@ -32,10 +32,16 @@ db.include({
             if (!this.preorder_by_id[preorder.id]) {
                 this.preorder_sorted.push(preorder.id);
             }
-            preorder.lines = [];
-            preorder.payments = [];
-            preorder.partner = this.partner_by_id[preorder.partner_id[0]];
-            this.preorder_by_id[preorder.id] = preorder;
+
+            if (this.preorder_by_id[preorder.id]){
+                _.extend(this.preorder_by_id[preorder.id], preorder)
+            }
+            else {
+                preorder.lines = [];
+                preorder.payments = [];
+                preorder.partner = this.partner_by_id[preorder.partner_id[0]];
+                this.preorder_by_id[preorder.id] = preorder;
+            }
 
             updated_count += 1;
         }
