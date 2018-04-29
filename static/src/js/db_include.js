@@ -8,6 +8,18 @@ db.include({
       return this.preorder_write_date || "1970-01-01 00:00:00";
     },
 
+    add_preorder: function(preorder){
+        if (this.preorder_by_id[preorder.id]){
+            _.extend(this.preorder_by_id[preorder.id], preorder)
+        }
+        else {
+            preorder.lines = [];
+            preorder.payments = [];
+            preorder.partner = this.partner_by_id[preorder.partner_id[0]];
+            this.preorder_by_id[preorder.id] = preorder;
+        }
+    },
+
     add_preorders: function(preorders){
         var updated_count = 0;
         var new_write_date = '';
@@ -29,18 +41,12 @@ db.include({
             } else if ( new_write_date < preorder.write_date ) {
                 new_write_date  = preorder.write_date;
             }
-            if (!this.preorder_by_id[preorder.id]) {
-                this.preorder_sorted.push(preorder.id);
-            }
 
-            if (this.preorder_by_id[preorder.id]){
-                _.extend(this.preorder_by_id[preorder.id], preorder)
+            if (['uncollected','wednesday','to_deliver'].indexOf(preorder.state) > -1){
+              this.add_preorder(preorder)
             }
             else {
-                preorder.lines = [];
-                preorder.payments = [];
-                preorder.partner = this.partner_by_id[preorder.partner_id[0]];
-                this.preorder_by_id[preorder.id] = preorder;
+              delete this.preorder_by_id[preorder.id]
             }
 
             updated_count += 1;
@@ -68,13 +74,8 @@ db.include({
         return this.preorder_by_id[id];
     },
 
-    get_preorders_sorted: function(max_count){
-        max_count = max_count ? Math.min(this.preorder_sorted.length, max_count) : this.preorder_sorted.length;
-        var preorders = [];
-        for (var i = 0; i < max_count; i++) {
-            preorders.push(this.preorder_by_id[this.preorder_sorted[i]]);
-        }
-        return preorders;
+    get_preorders_sorted: function(){
+        return Object.values(this.preorder_by_id);
     },
 
     search_preorder: function(query){

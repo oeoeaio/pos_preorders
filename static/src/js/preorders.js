@@ -200,7 +200,7 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             }else{
                 preorderline.classList.remove('highlight');
             }
-            if( preorder.state == 'collected' || preorder.state == 'delivered' ){
+            if( preorder.state == 'to_deliver'){
                 preorderline.classList.add('dulled');
             }else{
                 preorderline.classList.remove('dulled');
