@@ -27,7 +27,7 @@ var five_days_ago = moment().subtract(5, 'days').utc().format('YYYY-MM-DD HH:mm:
 
 var _super_pos = models.PosModel.prototype;
 models.PosModel = models.PosModel.extend({
-    reload_updated_preorders: function(){
+    refresh_preorder_states: function(){
         var self = this;
         var def  = new $.Deferred();
         var fields = ['state','write_date'];
@@ -100,6 +100,8 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
     init: function(parent, options) {
         this._super(parent, options);
         this.preorder_cache = new screens.DomCache();
+
+        this.pos.get('orders').bind('add',this.refresh_preorder_states, this)
     },
 
     auto_back: true,
@@ -122,8 +124,6 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
 
         var preorders = this.pos.db.get_preorders_sorted(1000);
         this.render_list(preorders);
-
-        this.reload_preorders();
 
         // if( this.old_client ){
         //     this.display_client_details('show',this.old_client,0);
@@ -323,13 +323,12 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             this.toggle_save_button();
         }
     },
-    reload_preorders: function(){
+    refresh_preorder_states: function(){
         var self = this;
-        return this.pos.reload_updated_preorders().then(function(preorder_ids){
+        return this.pos.refresh_preorder_states().then(function(preorder_ids){
             for (var i=0; i < preorder_ids.length; i++){
               self.preorder_cache.clear_node(preorder_ids[i]);
             }
-            self.render_list(self.pos.db.get_preorders_sorted(1000));
         });
     },
     toggle_save_button: function(){
