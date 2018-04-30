@@ -327,8 +327,9 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
         var self = this;
         return this.pos.refresh_preorder_states().then(function(preorder_ids){
             for (var i=0; i < preorder_ids.length; i++){
-              self.preorder_cache.clear_node(preorder_ids[i]);
+                self.preorder_cache.clear_node(preorder_ids[i]);
             }
+            self.pos.trigger("preorders:updated");
         });
     },
     toggle_save_button: function(){
