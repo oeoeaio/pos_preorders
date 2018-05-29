@@ -109,17 +109,17 @@ db.include({
             }
         }
     },
-
-    add_prepayments: function(payments) {
-        for (var i = 0; i < payments.length; i++) {
-            this.prepayments_by_id[payments[i].id] = payments[i];
-            var preorder = this.preorder_by_id[payments[i].preorder_id[0]];
-            if (preorder) {
-                preorder.payments.push(payments[i]);
-                payments[i].preorder = preorder;
-            }
-        }
-    }
+    //
+    // add_prepayments: function(payments) {
+    //     for (var i = 0; i < payments.length; i++) {
+    //         this.prepayments_by_id[payments[i].id] = payments[i];
+    //         var preorder = this.preorder_by_id[payments[i].preorder_id[0]];
+    //         if (preorder) {
+    //             preorder.payments.push(payments[i]);
+    //             payments[i].preorder = preorder;
+    //         }
+    //     }
+    // }
 });
 
 });

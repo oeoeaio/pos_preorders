@@ -81,15 +81,15 @@ models.load_models({
 
 // At POS Startup, after the preorders are loaded, load the prepayments, and associate
 // them with their preorder.
-models.load_models({
-    model: 'pos.prepayment',
-    fields: ['preorder_id','journal_id','amount'],
-    domain: [['pack_day','>',five_days_ago]],
-    loaded: function(self,payments){
-        self.db.prepayments_by_id = {};
-        self.db.add_prepayments(payments);
-    },
-});
+// models.load_models({
+//     model: 'pos.prepayment',
+//     fields: ['preorder_id','journal_id','amount'],
+//     domain: [['pack_day','>',five_days_ago]],
+//     loaded: function(self,payments){
+//         self.db.prepayments_by_id = {};
+//         self.db.add_prepayments(payments);
+//     },
+// });
 
 
 // The screen that allows you to select the floor, see and select the table,
@@ -208,29 +208,29 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             contents.appendChild(preorderline);
         }
     },
-    add_paymentline: function(order, payment) {
-      var cashregister;
-      for ( var j = 0; j < this.pos.cashregisters.length; j++ ) {
-          if ( this.pos.cashregisters[j].journal_id[0] === payment.journal_id[0] ){
-              cashregister = this.pos.cashregisters[j];
-              break;
-          }
-      }
-
-      var paymentline = new models.Paymentline({},{order: order, cashregister: cashregister, pos: this.pos});
-      paymentline.set_amount(payment.amount);
-      order.paymentlines.add(paymentline);
-    },
+    // add_paymentline: function(order, payment) {
+    //   var cashregister;
+    //   for ( var j = 0; j < this.pos.cashregisters.length; j++ ) {
+    //       if ( this.pos.cashregisters[j].journal_id[0] === payment.journal_id[0] ){
+    //           cashregister = this.pos.cashregisters[j];
+    //           break;
+    //       }
+    //   }
+    //
+    //   var paymentline = new models.Paymentline({},{order: order, cashregister: cashregister, pos: this.pos});
+    //   paymentline.set_amount(payment.amount);
+    //   order.paymentlines.add(paymentline);
+    // },
     clear_order: function(order){
       var orderlines = order.orderlines.models;
       while (orderlines.length > 0){
         order.remove_orderline(orderlines[0]);
       }
 
-      var paymentlines = order.paymentlines.models;
-      while (paymentlines.length > 0){
-        order.remove_paymentline(paymentlines[0]);
-      }
+      // var paymentlines = order.paymentlines.models;
+      // while (paymentlines.length > 0){
+      //   order.remove_paymentline(paymentlines[0]);
+      // }
 
       order.preorder_ids = [];
 
@@ -244,11 +244,11 @@ var PreorderListScreenWidget = screens.ScreenWidget.extend({
             product = this.pos.db.product_by_id[line.product_id[0]];
             order.add_product(product, { quantity: line.qty });
         }
-        var payment;
-        for(var i = 0; i < preorder.payments.length; i++){
-            payment = preorder.payments[i];
-            this.add_paymentline(order, payment);
-        }
+        // var payment;
+        // for(var i = 0; i < preorder.payments.length; i++){
+        //     payment = preorder.payments[i];
+        //     this.add_paymentline(order, payment);
+        // }
 
         order.preorder_ids.push(preorder.id);
 

@@ -39,7 +39,7 @@
                     <field name="partner_id" domain="[('customer', '=', True)]" context="{'search_default_customer':1}"/>
                     <field name="amount_total" widget="monetary"/>
                     <field name="state"/>
-                    <field name="amount_paid" widget="monetary"/>
+                    <!-- <field name="amount_paid" widget="monetary"/> -->
                     <field name="pack_day"/>
                     <field name="name"/>
                 </group>
@@ -61,7 +61,7 @@
                         </field>
                         <div class="oe_clear"/>
                     </page>
-                    <page string="Pre-Payments">
+                    <!-- <page string="Pre-Payments">
                         <field name="prepayments" colspan="4" nolabel="1">
                             <tree editable="bottom" string="Payment lines">
                                 <field name="journal_id"/>
@@ -74,7 +74,7 @@
                                 </group>
                             </form>
                         </field>
-                    </page>
+                    </page> -->
                 </notebook>
             </sheet>
             </form>
@@ -117,7 +117,7 @@
                 <field name='phone'/>
                 <field name='pack_day'/>
                 <field name="amount_total" widget="monetary"/>
-                <field name="amount_paid" widget="monetary"/>
+                <!-- <field name="amount_paid" widget="monetary"/> -->
                 <field name="state"/>
                 <field name="state_date"/>
                 <!-- <field name="amount_total" sum="Amount total" widget="monetary"/> -->
