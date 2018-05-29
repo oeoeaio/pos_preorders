@@ -22,7 +22,7 @@
                 <field name="name"/>
                 <field name="state"/>
                 <filter name="filter_to_collected" string="Collected or Delivered" domain="[('state', 'in', ['collected','delivered'])]"/>
-                <filter name="filter_to_uncollected" string="Not Collected or Delivered" domain="[('state', 'not in', ['collected','delivered'])]"/>
+                <filter name="filter_to_uncollected" string="Not Collected or Delivered" domain="[('state', 'in', ['uncollected','wednesday'])]"/>
             </search>
         </field>
     </record>
