@@ -13,7 +13,7 @@ class SmsBroadcast(models.TransientModel):
     preorder_reply_to = fields.Char('Reply To')
 
     def reply_to(self):
-        return self.preorder_reply_to
+        return self._clean_number(self.preorder_reply_to)
 
     def message(self):
         return self.preorder_message
