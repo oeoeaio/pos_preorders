@@ -23,7 +23,7 @@
     <act_window
         name="Update Status"
         res_model="pos.preorder.state"
-        src_model="pos.preorder"
+        binding_model="pos.preorder"
         view_mode="form"
         target="new"
         id="action_preorder_state"/>
