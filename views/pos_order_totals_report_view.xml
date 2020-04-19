@@ -37,7 +37,6 @@
         <field name="name">Orders Totals Analysis</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">report.pos.order_totals</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,graph</field>
         <field name="search_view_id" ref="view_report_pos_order_totals_search"/>
         <field name="context">{'group_by_no_leaf':1,'group_by':[]}</field>
