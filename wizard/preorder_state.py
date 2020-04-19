@@ -29,7 +29,6 @@ class State(models.TransientModel):
         result['record_count'] = len(records)
         return result
 
-    @api.multi
     def action_update_state(self):
         records = self._get_records()
         hash = { 'state': self.state }

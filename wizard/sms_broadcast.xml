@@ -26,6 +26,5 @@
         src_model="pos.preorder"
         view_mode="form"
         target="new"
-        key2="client_action_multi"
         id="action_preorder_send_sms"/>
 </odoo>
