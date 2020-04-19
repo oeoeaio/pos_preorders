@@ -23,7 +23,7 @@
     <act_window
         name="Send SMS"
         res_model="pos.preorder.sms.broadcast"
-        src_model="pos.preorder"
+        binding_model="pos.preorder"
         view_mode="form"
         target="new"
         id="action_preorder_send_sms"/>
