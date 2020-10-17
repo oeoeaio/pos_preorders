@@ -36,7 +36,7 @@
                 </header>
                 <sheet>
                 <group col="4" colspan="4" name="order_fields">
-                    <field name="partner_id" domain="[('customer', '=', True)]" context="{'search_default_customer':1}"/>
+                    <field name="partner_id" context="{'search_default_customer':1, 'res_partner_search_mode': 'customer'}"/>
                     <field name="amount_total" widget="monetary"/>
                     <field name="state"/>
                     <!-- <field name="amount_paid" widget="monetary"/> -->
