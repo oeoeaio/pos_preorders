@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_report_pos_order_totals_tree" model="ir.ui.view">
+        <field name="name">report.pos.order_totals_totals.tree</field>
+        <field name="model">report.pos.order_totals</field>
+        <field name="arch" type="xml">
+            <tree string="Point of Sale Order Totals" create="false" default_order="date desc">
+                <field name="date" string="Order Date"/>
+                <field name="count" string="Order Count"/>
+                <field name="price_total" string="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_report_pos_order_totals_graph" model="ir.ui.view">
+        <field name="name">report.pos.order_totals_totals.graph</field>
+        <field name="model">report.pos.order_totals</field>
+        <field name="arch" type="xml">
+            <graph string="Point of Sale Analysis">
+                <field name="date" type="row"/>
+                <field name="count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_report_pos_order_totals_search" model="ir.ui.view">
+        <field name="name">report.pos.order_totals.search</field>
+        <field name="model">report.pos.order_totals</field>
+        <field name="arch" type="xml">
+            <search string="Point of Sale Analysis">
+                <field name="date"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_report_pos_order_totals_all" model="ir.actions.act_window">
+        <field name="name">Orders Totals Analysis</field>
+        <field name="res_model">report.pos.order_totals</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="search_view_id" ref="view_report_pos_order_totals_search"/>
+        <field name="context">{'group_by_no_leaf':1,'group_by':[]}</field>
+    </record>
+
+    <menuitem id="menu_report_pos_order_totals_all" name="Order Totals" action="action_report_pos_order_totals_all" parent="point_of_sale.menu_point_rep" sequence="2"/>
+</odoo>

@@ -9,6 +9,7 @@
     'description': "",
     'depends': ['point_of_sale','sms_broadcast'],
     'data': [
+        'views/pos_order_totals_report_view.xml',
         'views/preorder_views.xml',
         'views/res_config_settings.xml',
         'wizard/sms_broadcast.xml',
