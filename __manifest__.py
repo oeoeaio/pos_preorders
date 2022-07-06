@@ -16,7 +16,15 @@
         'wizard/preorder_state.xml',
         'security/ir.model.access.csv',
      ],
-    'qweb': ['static/src/xml/preorder_templates.xml'],
+    'assets': {
+        'point_of_sale.assets': [
+            'pos_preorders/static/src/js/**/*',
+            ('after', 'point_of_sale/static/src/css/pos.css', 'pos_preorders/static/src/css/preorders.css'),
+        ],
+        'web.assets_qweb': [
+            'pos_preorders/static/src/xml/**/*',
+        ],
+    },
     'images': [],
     'installable': True,
     'application': False,

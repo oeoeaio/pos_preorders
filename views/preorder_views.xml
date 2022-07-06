@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="assets" inherit_id="point_of_sale.assets">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/pos_preorders/static/src/js/db_include.js"></script>
-            <script type="text/javascript" src="/pos_preorders/static/src/js/preorders.js"></script>
-            <script type="text/javascript" src="/pos_preorders/static/src/js/load_button.js"></script>
-        </xpath>
-        <xpath expr="//link[@id='pos-stylesheet']" position="after">
-            <link rel="stylesheet" href="/pos_preorders/static/src/css/preorders.css" />
-        </xpath>
-    </template>
-
     <record id="view_pos_preorder_filter" model="ir.ui.view">
         <field name="name">pos.preorder.search</field>
         <field name="model">pos.preorder</field>
