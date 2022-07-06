@@ -90,7 +90,7 @@
 
     <menuitem id="menu_pos_preorder"
         name="Pre-Orders"
-        parent="point_of_sale.menu_point_of_sale"
+        parent="point_of_sale.menu_point_root"
         action="action_pos_preorder_form"
         sequence="4"
         groups="point_of_sale.group_pos_manager,point_of_sale.group_pos_user"/>
