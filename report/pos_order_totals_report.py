@@ -32,7 +32,6 @@ class PosOrderTotalsReport(models.Model):
             GROUP BY 2
         """
 
-    @api.model_cr
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
         self._cr.execute("""
