@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="preorders.template" xml:space="preserve">
+
+    <t t-name="PreordersButton" owl="1">
+      <span class="control-button load-preorder">
+            <i class="fa fa-shopping-cart"></i>
+            Preorder
+        </span>
+    </t>
+</templates>

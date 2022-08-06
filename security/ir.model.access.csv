@@ -2,5 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_pos_preorder,pos.preorder,model_pos_preorder,point_of_sale.group_pos_user,1,1,1,1
 access_pos_preorder_line,pos.preorder.line,model_pos_preorder_line,point_of_sale.group_pos_user,1,1,1,1
 access_pos_prepayment,pos.prepayment,model_pos_prepayment,point_of_sale.group_pos_user,1,1,1,1
+access_pos_preorder_state,pos.preorder.state,model_pos_preorder_state,point_of_sale.group_pos_user,1,1,1,1
 access_pos_preorder_sms_broadcast,pos.preorder.sms.broadcast,model_pos_preorder_sms_broadcast,point_of_sale.group_pos_user,1,1,1,1
 access_report_pos_order_totals,report.pos.order_totals,model_report_pos_order_totals,point_of_sale.group_pos_user,1,1,1,1

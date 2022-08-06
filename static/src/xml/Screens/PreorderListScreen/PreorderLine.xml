@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="preorders.template" xml:space="preserve">
+    <t t-name="PreorderLine" owl="1">
+        <tr t-attf-class='preorder-line {{highlight}}' t-att-data-id='props.preorder.id' t-on-click="trigger('click-preorder', {preorder: props.preorder})">
+            <td class='customer'><t t-esc='props.preorder.partner.name' /></td>
+            <td class='status'><t t-esc='props.preorder.state' /></td>
+            <td class='total'><t t-esc='env.pos.format_currency(props.preorder.amount_total)' /></td>
+        </tr>
+    </t>
+</templates>

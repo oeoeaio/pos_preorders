@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="preorders.template" xml:space="preserve">
+    <t t-name="PreorderListScreen"  owl="1">
+        <div class="preorderlist-screen screen">
+            <div class="screen-content">
+                <section class="top-content">
+                    <div class='button back' t-on-click="back">
+                        <i class='fa fa-angle-double-left' />
+                        Cancel
+                    </div>
+                    <div class='searchbox-preorder top-content-center'>
+                        <input placeholder='Search by Customer Name' size="1" t-on-keyup="updatePreorderList" />
+                        <span class='search-clear-preorder'></span>
+                    </div>
+                    <div class='button next highlight' t-if="isNextButtonVisible" t-on-click="confirm" >
+                        Select Preorder
+                        <i class='fa fa-angle-double-right'></i>
+                    </div>
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow collapsed'>
+                            <div class='subwindow-container collapsed'>
+                                <div class='subwindow-container-fix preorder-details-contents'>
+                                </div>
+                            </div>
+                        </section>
+                        <section class='subwindow'>
+                            <div class='subwindow-container'>
+                                <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                                    <table class='preorder-list'>
+                                        <thead>
+                                            <tr>
+                                                <th class='customer'>Customer</th>
+                                                <th class='status'>Status</th>
+                                                <th class='total'>Order Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class='preorder-list-contents'>
+                                            <t t-foreach="preorders" t-as="preorder" t-key="preorder.id">
+                                                <PreorderLine
+                                                  preorder="preorder"
+                                                  selectedPreorder="state.selectedPreorder"
+                                                  t-on-click-preorder="clickPreorder"
+                                                />
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -57,3 +57,47 @@
 .pos .preorderlist-screen .searchbox input{
     width: 300px;
 }
+
+.pos .searchbox-preorder {
+    padding: 3px 13px;
+    margin-top: 12px;
+    margin-bottom : 12px;
+}
+
+.pos .searchbox-preorder input {
+    width: 120px;
+    border: 1px solid #cecbcb;
+    padding: 10px 20px;
+    padding-left: 38px;
+    padding-right: 33px;
+    background-color: white;
+    border-radius: 20px;
+    font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
+    font-size: 13px;
+}
+.pos .searchbox-preorder input:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px rgb(153, 153, 255) inset;
+    color: rgb(153, 153, 255);
+}
+
+.pos .search-clear-preorder {
+    position: absolute;
+    top: 9px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-clear-preorder.left {
+    left: 11px;
+    color: #808080;
+}
+
+.search-clear-preorder.right {
+    left: 145px;
+    color: #808080;
+    cursor: pointer;
+}
