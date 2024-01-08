@@ -41,7 +41,7 @@ models.PosModel = models.PosModel.extend({
                 resolve();
             }
             else {
-                reject(new Error('Failed in updating preorders.'));
+                reject();
             }
           }, function (type, err) { reject(); });
       });
